@@ -17,11 +17,51 @@ def home():
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
-        admin_name = request.form['admin_name']
-        session['admin_name'] = admin_name
-        return redirect(url_for('admin_home'))
+        admin_id = request.form['admin_id']
+        password = request.form['password']
+
+        user = admin_users.get(admin_id)
+        if user and user['password'] == password:
+            session['admin_name'] = user['name']
+            return redirect(url_for('admin_home'))
+        else:
+            flash("Invalid Admin ID or Password. Please try again.")
+            return redirect(url_for('admin_login'))
+
     return render_template('admin_login.html')
 
+
+#FORGOT PASSWORD
+@app.route('/admin/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        if 'reset_stage' not in session:
+            # First stage: search for username
+            username = request.form['username']
+            if username in admin_users:
+                session['reset_user'] = username
+                session['reset_stage'] = True
+            else:
+                flash("No account found with that username.")
+        else:
+            # Second stage: reset password
+            new_password = request.form['new_password']
+            confirm_password = request.form['confirm_password']
+
+            if new_password != confirm_password:
+                flash("Passwords do not match.")
+            else:
+                username = session['reset_user']
+                admin_users[username]['password'] = new_password
+                flash("Password successfully updated!")
+                session.pop('reset_user', None)
+                session.pop('reset_stage', None)
+                return redirect(url_for('admin_login'))
+
+    return render_template('admin_forgot_password.html', reset_stage=session.get('reset_stage'))
+
+
+#ADMIN HOMEPAGE
 @app.route('/admin/home')
 def admin_home():
     admin_name = session.get('admin_name', 'Admin')  # default to 'Admin' if not set
