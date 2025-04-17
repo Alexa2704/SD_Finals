@@ -6,8 +6,6 @@ admin_users = {
     "M2023-00056": {"name": "Alexa Kate B. Mamato", "password": "1234567890"}
 }
 
-
-
 student_users = {}
 
 # Role Selection Page
@@ -19,21 +17,14 @@ def home():
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
-        admin_id = request.form['admin_id']
-        password = request.form['password']
-        user = admin_users.get(admin_id)
-
-        if user and user['password'] == password:
-            admin_name = user['name']
-            return redirect(url_for('admin_home', admin_name=admin_name))
-        else:
-            flash('Invalid credentials')
+        admin_name = request.form['admin_name']
+        session['admin_name'] = admin_name
+        return redirect(url_for('admin_home'))
     return render_template('admin_login.html')
-
 
 @app.route('/admin/home')
 def admin_home():
-    admin_name = request.args.get('admin_name', 'Admin')  # fallback if not passed
+    admin_name = session.get('admin_name', 'Admin')  # default to 'Admin' if not set
     return render_template('admin_home.html', admin_name=admin_name)
 
 @app.route('/attendance')
