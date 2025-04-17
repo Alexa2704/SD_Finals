@@ -3,7 +3,12 @@ app = Flask(__name__)
 app.secret_key = 'secretkey'
 
 admin_users = {
-    "M2023-00056": {"name": "Alexa Kate B. Mamato", "password": "1234567890"}
+    "alexakate": {
+        "name": "Alexa Kate B. Mamato",
+        "email": "alexa@example.com",
+        "password": "yourpassword123"
+    },
+    # You can add more admins here
 }
 
 student_users = {}
@@ -34,31 +39,39 @@ def admin_login():
 #FORGOT PASSWORD
 @app.route('/admin/forgot-password', methods=['GET', 'POST'])
 def forgot_password():
+    reset_stage = False
+    admin_info = None
+
     if request.method == 'POST':
-        if 'reset_stage' not in session:
-            # First stage: search for username
+        if 'username' in request.form:
             username = request.form['username']
             if username in admin_users:
                 session['reset_user'] = username
-                session['reset_stage'] = True
+                admin_info = admin_users[username]
+                reset_stage = True
             else:
                 flash("No account found with that username.")
+                return redirect(url_for('forgot_password'))
         else:
-            # Second stage: reset password
+            # This means we're resetting the password
             new_password = request.form['new_password']
             confirm_password = request.form['confirm_password']
-
             if new_password != confirm_password:
                 flash("Passwords do not match.")
+                reset_stage = True
+                admin_info = admin_users.get(session.get('reset_user'))
             else:
-                username = session['reset_user']
-                admin_users[username]['password'] = new_password
-                flash("Password successfully updated!")
+                admin_users[session['reset_user']]['password'] = new_password
+                flash("Password successfully reset.")
                 session.pop('reset_user', None)
-                session.pop('reset_stage', None)
                 return redirect(url_for('admin_login'))
 
-    return render_template('admin_forgot_password.html', reset_stage=session.get('reset_stage'))
+    return render_template(
+        'admin_forgot_password.html',
+        reset_stage=reset_stage,
+        admin_info=admin_info
+    )
+
 
 
 #ADMIN HOMEPAGE
@@ -133,8 +146,7 @@ def edit(student_id):
 if __name__ == '__main__':
     app.run(debug=True)
 
-
-
+#ADMIN SIGN UP
 @app.route('/admin/signup', methods=['GET', 'POST'])
 def admin_signup():
     if request.method == 'POST':
