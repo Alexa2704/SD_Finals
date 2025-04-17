@@ -1,0 +1,114 @@
+/* General Body Styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f3f4f6;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Form Styling */
+.form-container {
+    width: 100%;
+    max-width: 360px;
+    background-color: white;
+    padding: 20px;
+    margin-top: 60px;
+    margin-right: 60px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    float: right;
+}
+
+/* Form Inputs */
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Buttons */
+form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #7b6039;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #6f4e37;
+}
+
+/* Form Box Container */
+.form-box {
+    background-color: #fff;
+    padding: 50px;
+    border-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+/* Form Options & Links */
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.switch-page {
+    text-align: center;
+    margin-top: 15px;
+}
+
+/* Error Flash Message */
+.error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #999;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Flash Messages */
+.flash.success {
+    color: green;
+}
+
+.flash.info {
+    color: blue;
+}
+
+/* Heading Styles */
+h1 {
+    color: #4b0082;
+}
+
+
+/*ADMIN HOME BUTTONS*/
